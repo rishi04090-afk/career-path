@@ -1,38 +1,113 @@
+
 .App {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+
+
+  text-align: center;
+  color: #4f8cff;
+
+.career-card {
+  background: #f0f4fa;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: transform 0.1s, box-shadow 0.1s;
+  min-width: 180px;
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.career-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.12);
+}
+.career-title {
+  font-weight: bold;
+  margin-top: 0.5rem;
+  color: #222;
+}
+.career-desc {
+  font-size: 0.95rem;
+  color: #555;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.timeline {
+  margin: 2rem 0;
+  border-left: 3px solid #e0e7ef;
+  padding-left: 2rem;
+}
+.timeline-step {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: box-shadow 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.timeline-step:hover {
+  box-shadow: 0 4px 16px rgba(255,179,0,0.10);
+}
+.step-title {
+  font-weight: bold;
+  color: #333;
+}
+.step-details {
+  font-size: 0.95rem;
+  color: #666;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  min-width: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+}
+.modal-content button {
+  margin-top: 1rem;
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-.App-link {
-  color: #61dafb;
+.comparison-view {
+  margin-top: 2rem;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.comparison-view table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f8fafc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.comparison-view th, .comparison-view td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+.comparison-view th {
+  background: #e0e7ef;
+  color: #333;
+}
+.comparison-view tr:nth-child(even) {
+  background: #f0f4fa;
 }
