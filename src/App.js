@@ -19,7 +19,6 @@ function App() {
   const [token, setToken] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showProfileSettings, setShowProfileSettings] = useState(false);
-  const [loadingBookmarks, setLoadingBookmarks] = useState(false);
 
   const API_URL = 'http://localhost:5000/api';
 
@@ -54,7 +53,6 @@ function App() {
 
   const loadBookmarksFromAPI = async (authToken) => {
     try {
-      setLoadingBookmarks(true);
       const response = await fetch(`${API_URL}/bookmarks`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
       });
@@ -64,8 +62,6 @@ function App() {
       }
     } catch (e) {
       console.error('Error loading bookmarks from API:', e);
-    } finally {
-      setLoadingBookmarks(false);
     }
   };
 
