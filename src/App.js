@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { careers } from './data/careers';
 import CareerSelection from './components/CareerSelection';
@@ -42,7 +42,7 @@ function App() {
         }
       }
     }
-  }, []);
+  }, [loadBookmarksFromAPI]);
 
   // Save guest bookmarks to localStorage when they change (if not logged in)
   useEffect(() => {
@@ -51,7 +51,7 @@ function App() {
     }
   }, [bookmarks, token]);
 
-  const loadBookmarksFromAPI = async (authToken) => {
+  const loadBookmarksFromAPI = useCallback(async (authToken) => {
     try {
       const response = await fetch(`${API_URL}/bookmarks`, {
         headers: { 'Authorization': `Bearer ${authToken}` }
@@ -63,7 +63,7 @@ function App() {
     } catch (e) {
       console.error('Error loading bookmarks from API:', e);
     }
-  };
+  }, [API_URL]);
 
   const handleLoginSuccess = (newToken, newUser) => {
     setToken(newToken);
