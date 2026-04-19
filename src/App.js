@@ -1,3 +1,4 @@
+// Vercel rebuild trigger - 2026-04-18
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { careers } from './data/careers';
