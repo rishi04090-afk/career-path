@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { careers } from './data/careers';
 import CareerSelection from './components/CareerSelection';
@@ -10,6 +10,8 @@ import AuthModal from './components/AuthModal';
 import ProfilePictureDisplay from './components/ProfilePictureDisplay';
 import ProfileSettingsModal from './components/ProfileSettingsModal';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 function App() {
   const [selectedCareer, setSelectedCareer] = useState(null);
   const [selectedStep, setSelectedStep] = useState(null);
@@ -20,7 +22,19 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showProfileSettings, setShowProfileSettings] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const loadBookmarksFromAPI = async (authToken) => {
+    try {
+      const response = await fetch(`${API_URL}/bookmarks`, {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setBookmarks(data);
+      }
+    } catch (e) {
+      console.error('Error loading bookmarks from API:', e);
+    }
+  };
 
   // Load user and bookmarks on mount
   useEffect(() => {
@@ -42,7 +56,8 @@ function App() {
         }
       }
     }
-  }, [loadBookmarksFromAPI]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Save guest bookmarks to localStorage when they change (if not logged in)
   useEffect(() => {
@@ -50,20 +65,6 @@ function App() {
       localStorage.setItem('careerBookmarks', JSON.stringify(bookmarks));
     }
   }, [bookmarks, token]);
-
-  const loadBookmarksFromAPI = useCallback(async (authToken) => {
-    try {
-      const response = await fetch(`${API_URL}/bookmarks`, {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setBookmarks(data);
-      }
-    } catch (e) {
-      console.error('Error loading bookmarks from API:', e);
-    }
-  }, [API_URL]);
 
   const handleLoginSuccess = (newToken, newUser) => {
     setToken(newToken);
