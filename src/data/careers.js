@@ -1,4 +1,4 @@
-// Hardcoded career data for initial UI
+// Career path data with step-by-step roadmaps
 export const careers = [
   {
     id: 'teacher',
