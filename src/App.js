@@ -18,7 +18,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [loadingBookmarks, setLoadingBookmarks] = useState(false);
   const [showProfileSettings, setShowProfileSettings] = useState(false);
 
   const API_URL = 'http://localhost:5000/api';
