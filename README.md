@@ -1,53 +1,230 @@
-# Getting Started with Create React App
+# 🎯 Career Path Builder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application that helps students and career seekers explore different career paths with detailed step-by-step roadmaps, costs, timelines, and salary projections.
 
-## Available Scripts
+## 🌟 Features
 
-In the project directory, you can run:
+### Frontend (React)
+- **Career Selection**: Browse 7+ different careers with icons and descriptions
+- **Interactive Timeline**: Visual step-by-step roadmap for each career
+- **Detailed Step Information**: Click any step to see duration, cost, requirements, and salary info
+- **Career Comparison**: Compare up to 3 careers side-by-side
+- **Bookmarks**: Save favorite careers locally or to your profile
+- **What If Exploration**: Customize your path with scholarships and fast-track options
+- **Beautiful UI**: Modern, animated, gradient-based design with responsive layout
+- **Progress Tracking**: Track your progress on each career path
 
-### `npm start`
+### Backend (Node.js + Express + MongoDB)
+- **User Authentication**: Register, login, and secure JWT-based authentication
+- **Bookmark Management**: Save/manage career bookmarks
+- **Progress Tracking**: Track which steps you've completed
+- **RESTful API**: Well-structured endpoints for all features
+- **Database Integration**: MongoDB for persistent data storage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
+- Node.js v14+
+- MongoDB (local or cloud)
+- npm or yarn
 
-### `npm test`
+### Frontend Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# Navigate to project root
+cd career-path
 
-### `npm run build`
+# Install dependencies
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Start the development server
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The app will open at http://localhost:3000
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Setup
 
-### `npm run eject`
+```bash
+# Navigate to backend directory
+cd backend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Install dependencies
+npm install
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Configure environment variables
+# Create .env file (see backend/README.md for details)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Start the backend server
+npm run dev
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The API will run at http://localhost:5000
 
-## Learn More
+## 📁 Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+career-path/
+├── src/
+│   ├── components/
+│   │   ├── CareerSelection.js      # Career selection UI
+│   │   ├── Timeline.js             # Step-by-step timeline
+│   │   ├── StepModal.js            # Detailed step information
+│   │   ├── ComparisonView.js       # Career comparison table
+│   │   └── PathCustomizer.js       # What If exploration
+│   ├── data/
+│   │   └── careers.js              # Career data (7+ careers)
+│   ├── App.js                       # Main app component
+│   ├── App.css                      # Beautiful styling
+│   └── index.js                     # React entry point
+├── backend/
+│   ├── models/                      # MongoDB schemas
+│   ├── routes/                      # API endpoints
+│   ├── server.js                    # Express server
+│   ├── .env                         # Environment variables
+│   └── package.json                 # Dependencies
+└── public/
+    └── index.html                   # HTML template
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🎓 Careers Included
 
-### Code Splitting
+1. **🧑‍🏫 Teacher** - 9-11 years, $30k-$110k total cost
+2. **👩‍⚕️ Nurse** - 8-10 years, $15k-$60k total cost
+3. **💻 Software Developer** - 7-9 years, $20k-$100k total cost
+4. **🔌 Electrician** - 7-9 years, $5k-$15k total cost
+5. **⚖️ Lawyer** - 11-13 years, $60k-$250k total cost
+6. **💊 Pharmacist** - 10-12 years, $80k-$200k total cost
+7. **🔧 Plumber** - 6-8 years, $5k-$15k total cost
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Each career includes:
+- Step-by-step roadmap from high school to advanced roles
+- Duration for each step
+- Cost ranges for education
+- Expected salary after each milestone
+- Prerequisites and requirements
+- Popular schools and institutions
+
+## 🔌 API Endpoints
+
+### Careers
+```
+GET /api/careers              - Get all careers
+GET /api/careers/:id          - Get single career
+GET /api/careers/:id/steps    - Get career steps
+```
+
+### Authentication
+```
+POST /api/users/register      - Register new user
+POST /api/users/login         - Login user
+GET /api/users/profile        - Get current user (auth required)
+```
+
+### Bookmarks (requires JWT token)
+```
+GET /api/bookmarks            - Get user's bookmarks
+POST /api/bookmarks           - Add bookmark
+DELETE /api/bookmarks/:careerId - Remove bookmark
+```
+
+### Progress (requires JWT token)
+```
+GET /api/progress/:careerId   - Get progress for career
+POST /api/progress/:careerId/:stepId - Update step progress
+GET /api/progress/:careerId/summary - Get completion summary
+```
+
+## 💾 Data Models
+
+### User
+```javascript
+{
+  email: String (unique),
+  password: String (hashed),
+  name: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### Bookmark
+```javascript
+{
+  userId: ObjectId,
+  careerId: String,
+  careerTitle: String,
+  careerIcon: String,
+  createdAt: Date
+}
+```
+
+### Progress
+```javascript
+{
+  userId: ObjectId,
+  careerId: String,
+  stepId: Number,
+  status: String ('not-started', 'in-progress', 'completed'),
+  completedDate: Date,
+  notes: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+## 🎨 Design Features
+
+- **Gradient Theme**: Purple to violet gradient backgrounds
+- **Smooth Animations**: Fade-in, slide-in, and bounce effects
+- **Hover Effects**: Interactive card elevations and transformations
+- **Color Coding**: Blue (school), green (work), orange (growth)
+- **Responsive Design**: Works on mobile, tablet, and desktop
+- **Dark Mode Ready**: Can be extended with dark theme
+
+## 🔐 Security
+
+- Passwords hashed with bcryptjs
+- JWT tokens for authentication
+- Token expiration (7 days)
+- CORS protection
+- Environment variables for sensitive data
+
+## 🚀 Future Enhancements
+
+- [ ] AI-powered career recommendations
+- [ ] Progress analytics and charts
+- [ ] Email notifications
+- [ ] Social sharing features
+- [ ] Real salary data from APIs
+- [ ] Job market trends
+- [ ] Networking features
+- [ ] Mentorship connections
+- [ ] Dark theme
+- [ ] Multiple languages
+
+## 📖 Documentation
+
+- Frontend: See [src/components/](src/components/) for component details
+- Backend: See [backend/README.md](backend/README.md) for API documentation
+
+## 🤝 Contributing
+
+Feel free to fork, modify, and improve this project!
+
+## 📝 License
+
+This project is open source and available under the MIT License.
+
+## 💬 Questions?
+
+Check the README files in each directory for more detailed information:
+- Frontend features: [Creating new components, styling with CSS](src/)
+- Backend setup: [API routes, database schema](backend/README.md)
+
+---
+
+**Happy career planning! 🎯**
 
 ### Analyzing the Bundle Size
 
