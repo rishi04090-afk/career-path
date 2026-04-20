@@ -19,6 +19,12 @@ const ProfilePictureSelector = ({ onSelect, currentPfp }) => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Check file size (limit to 500KB)
+      if (file.size > 500 * 1024) {
+        alert('Image is too large. Please use an image under 500KB.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (event) => {
         const imageData = event.target.result;
@@ -80,7 +86,7 @@ const ProfilePictureSelector = ({ onSelect, currentPfp }) => {
       {/* Upload Custom Image */}
       <div style={{
         border: '2px dashed #ddd',
-        padding: '1rem',
+        padding: '1.5rem',
         borderRadius: '8px',
         textAlign: 'center',
         background: '#f9f9f9'
@@ -98,6 +104,9 @@ const ProfilePictureSelector = ({ onSelect, currentPfp }) => {
           <span style={{ color: '#667eea', fontWeight: 'bold' }}>
             Upload Your Own Picture
           </span>
+          <p style={{ fontSize: '0.8rem', color: '#999', margin: '0.5rem 0 0 0' }}>
+            Max 500KB • JPG, PNG, or GIF
+          </p>
           <input
             type="file"
             accept="image/*"
@@ -106,19 +115,19 @@ const ProfilePictureSelector = ({ onSelect, currentPfp }) => {
           />
         </label>
         {uploadedImage && (
-          <div style={{ marginTop: '0.8rem' }}>
+          <div style={{ marginTop: '1rem' }}>
             <img
               src={uploadedImage}
               alt="Uploaded"
               style={{
-                width: '70px',
-                height: '70px',
+                width: '80px',
+                height: '80px',
                 borderRadius: '50%',
                 objectFit: 'cover',
                 border: '3px solid #667eea'
               }}
             />
-            <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.5rem' }}>
+            <p style={{ fontSize: '0.85rem', color: '#4caf50', marginTop: '0.5rem', fontWeight: 'bold' }}>
               ✓ Image selected
             </p>
           </div>
