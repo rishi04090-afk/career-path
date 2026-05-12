@@ -15,25 +15,25 @@ const StepModal = ({ step, onClose }) => {
           )}
           <div className="step-info-grid">
             <div className="info-item">
-              <span className="label">⏱️ Duration</span>
+              <span className="label">Duration</span>
               <span className="value">{step.duration}</span>
             </div>
             <div className="info-item">
-              <span className="label">💰 Cost</span>
+              <span className="label">Cost</span>
               <span className="value">{step.cost}</span>
             </div>
             <div className="info-item">
-              <span className="label">📊 Starting Salary</span>
+              <span className="label">Starting Salary</span>
               <span className="value">{step.salary_after}</span>
             </div>
             <div className="info-item">
-              <span className="label">📋 Prerequisites</span>
+              <span className="label">Prerequisites</span>
               <span className="value">{step.requirements}</span>
             </div>
           </div>
           {step.schools && step.schools.length > 0 && (
             <div className="schools-section">
-              <strong>📚 Popular Schools/Institutions:</strong>
+              <strong>Popular Schools/Institutions:</strong>
               <ul>
                 {step.schools.map((school, idx) => (
                   <li key={idx}>{school}</li>
