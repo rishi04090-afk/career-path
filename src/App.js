@@ -14,6 +14,7 @@ import ProfileSettingsModal from './components/ProfileSettingsModal';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 function App() {
+  const [showHome, setShowHome] = useState(true);
   const [selectedCareer, setSelectedCareer] = useState(null);
   const [selectedStep, setSelectedStep] = useState(null);
   const [compareList, setCompareList] = useState([]);
@@ -89,6 +90,7 @@ function App() {
   const handleCareerSelect = (career) => {
     setSelectedCareer(career);
     setSelectedStep(null);
+    setShowHome(false);
   };
 
   const handleStepClick = (step) => {
@@ -154,256 +156,184 @@ function App() {
   const handleBack = () => {
     setSelectedCareer(null);
     setSelectedStep(null);
+    setShowHome(false);
   };
 
   const isBookmarked = (careerId) => bookmarks.some((c) => c.id === careerId);
 
   return (
     <div className="App">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h1>🎯 Career Path Builder</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          {user ? (
-            <>
-              <button
-                onClick={() => setShowProfileSettings(true)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '0.5rem',
-                  borderRadius: '50%',
-                  transition: 'all 0.3s',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.8rem'
-                }}
-                onMouseEnter={(e) => e.target.style.background = 'rgba(0,0,0,0.05)'}
-                onMouseLeave={(e) => e.target.style.background = 'none'}
-                title="Click to customize profile"
-              >
-                <ProfilePictureDisplay user={user} size="small" />
-                <span style={{ color: '#667eea', fontWeight: 'bold' }}>
-                  {user.name || user.email}
-                </span>
-              </button>
-              <button
-                onClick={handleLogout}
-                style={{
-                  background: '#e0e0e0',
-                  border: 'none',
-                  padding: '0.6rem 1rem',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={() => setShowAuthModal(true)}
-              style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: '#fff',
-                border: 'none',
-                padding: '0.6rem 1.2rem',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold'
-              }}
-            >
-              🔐 Login / Register
-            </button>
-          )}
-        </div>
-      </div>
-      {!selectedCareer ? (
-        <>
-          <CareerSelection 
-            onSelect={handleCareerSelect}
-            bookmarks={bookmarks}
-            onToggleBookmark={handleToggleBookmark}
-            onCompareToggle={handleCompareToggle}
-            compareList={compareList}
-          />
-          {bookmarks.length > 0 && (
-            <div style={{ margin: '2rem 0', padding: '1.5rem', background: '#fff0f5', borderRadius: '12px', border: '1px solid #ffb3d9' }}>
-              <h3>❤️ Your Bookmarks ({bookmarks.length})</h3>
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                {bookmarks.map((career) => (
-                  <div key={career.id} style={{ background: '#fff', padding: '1rem 1.2rem', borderRadius: '8px', border: '1px solid #ffb3d9', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                    <span style={{ cursor: 'pointer', fontWeight: 'bold' }} onClick={() => handleCareerSelect(career)} title="Click to view details">
-                      {career.icon} {career.title}
-                    </span>
-                    <button 
-                      onClick={() => handleCompareToggle(career)}
-                      style={{ 
-                        background: compareList.find((c) => c.id === career.id) ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : '#f0f0f0',
-                        color: compareList.find((c) => c.id === career.id) ? '#fff' : '#666',
-                        border: 'none', 
-                        padding: '0.5rem 0.8rem', 
-                        borderRadius: '6px', 
-                        cursor: 'pointer',
-                        fontSize: '0.9rem',
-                        fontWeight: compareList.find((c) => c.id === career.id) ? 'bold' : 'normal',
-                        transition: 'all 0.3s'
-                      }}
-                      title={compareList.find((c) => c.id === career.id) ? 'Remove from comparison' : 'Add to comparison'}
-                    >
-                      {compareList.find((c) => c.id === career.id) ? '✓' : '⚖️'} Compare
-                    </button>
-                    <button 
-                      onClick={() => handleToggleBookmark(career)}
-                      style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#ff69b4', padding: '0', fontSize: '1.2rem' }}
-                      title="Remove bookmark"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          <div style={{ margin: '2rem 0' }}>
-            <ComparisonView careers={compareList} />
+      {/* Professional Header/Navigation */}
+      <header className="app-header">
+        <div className="header-container">
+          <div className="logo-section" onClick={() => { setShowHome(true); setSelectedCareer(null); }} style={{ cursor: 'pointer' }}>
+            <h1 className="logo">PathFinder</h1>
+            <p className="tagline">Career Guidance Platform</p>
           </div>
-        </>
-      ) : (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <button 
-              onClick={handleBack} 
-              style={{ 
-                background: '#e0e7ef', 
-                border: 'none', 
-                padding: '0.6rem 1.2rem', 
-                borderRadius: '8px', 
-                cursor: 'pointer',
-                fontWeight: 'bold'
-              }}
-            >
-              ← Back to Careers
-            </button>
-            <button 
-              onClick={() => handleToggleBookmark(selectedCareer)}
-              style={{ 
-                background: isBookmarked(selectedCareer.id) ? '#ff69b4' : '#ddd', 
-                border: 'none', 
-                padding: '0.6rem 1.2rem', 
-                borderRadius: '8px', 
-                cursor: 'pointer',
-                color: '#fff',
-                fontWeight: 'bold',
-                transition: 'all 0.3s'
-              }}
-            >
-              {isBookmarked(selectedCareer.id) ? '❤️ Bookmarked' : '🤍 Bookmark'}
-            </button>
-          </div>
-          
-          {/* Career Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem', padding: '2rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '12px', color: '#fff' }}>
-            <div style={{ fontSize: '5rem' }}>{selectedCareer.icon}</div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: '2.5rem', marginBottom: '0.5rem' }}>{selectedCareer.title}</h1>
-              <p style={{ margin: 0, fontSize: '1.1rem', opacity: 0.95 }}>{selectedCareer.description}</p>
-            </div>
-          </div>
-
-          {/* Key Metrics */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-            <div style={{ background: '#f0f4fa', padding: '1.5rem', borderRadius: '10px', border: '2px solid #e0e7ef' }}>
-              <div style={{ color: '#667eea', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.5rem' }}>⏱️ TOTAL TIME</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>{selectedCareer.totalTime}</div>
-            </div>
-            <div style={{ background: '#f0f4fa', padding: '1.5rem', borderRadius: '10px', border: '2px solid #e0e7ef' }}>
-              <div style={{ color: '#667eea', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.5rem' }}>💰 TOTAL COST</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>{selectedCareer.totalCost}</div>
-            </div>
-            <div style={{ background: '#f0f4fa', padding: '1.5rem', borderRadius: '10px', border: '2px solid #e0e7ef' }}>
-              <div style={{ color: '#667eea', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.5rem' }}>💵 STARTING SALARY</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>{selectedCareer.steps[3]?.salary_after || 'Varies'}</div>
-            </div>
-            <div style={{ background: '#f0f4fa', padding: '1.5rem', borderRadius: '10px', border: '2px solid #e0e7ef' }}>
-              <div style={{ color: '#667eea', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.5rem' }}>📈 POTENTIAL SALARY</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>{selectedCareer.steps[5]?.salary_after || '$80k+'}</div>
-            </div>
-          </div>
-
-          {/* Stage Breakdown */}
-          <div style={{ marginBottom: '2rem', background: '#fafbfc', padding: '2rem', borderRadius: '12px', border: '1px solid #e0e7ef' }}>
-            <h2 style={{ marginTop: 0, color: '#333' }}>📚 What This Career Looks Like</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-              {selectedCareer.steps.map((step, idx) => (
-                <div 
-                  key={step.id} 
-                  style={{ 
-                    background: '#fff', 
-                    padding: '1.5rem', 
-                    borderRadius: '10px', 
-                    border: `3px solid ${step.type === 'school' ? '#4f8cff' : step.type === 'work' ? '#4caf50' : '#ffb300'}`,
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                    position: 'relative'
-                  }}
-                  onClick={() => handleStepClick(step)}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
+          <nav className="header-nav">
+            <button className="nav-link" onClick={() => setShowHome(true)}>Home</button>
+            <button className="nav-link" onClick={() => { setShowHome(false); setSelectedCareer(null); }}>Browse Careers</button>
+            {user && <span className="nav-user-name">{user.name || user.email}</span>}
+          </nav>
+          <div className="header-actions">
+            {user ? (
+              <>
+                <button
+                  className="profile-button"
+                  onClick={() => setShowProfileSettings(true)}
+                  title="Profile Settings"
                 >
-                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
-                    {step.type === 'school' ? '🎓' : step.type === 'work' ? '💼' : '🚀'}
-                  </div>
-                  <div style={{ fontSize: '0.85rem', color: '#999', fontWeight: 'bold', marginBottom: '0.5rem' }}>STAGE {idx + 1}</div>
-                  <h4 style={{ margin: '0 0 0.8rem 0', color: '#333', fontSize: '1.1rem' }}>{step.title}</h4>
-                  <div style={{ fontSize: '0.9rem', color: '#666', lineHeight: '1.6' }}>
-                    <p style={{ margin: '0.5rem 0' }}><strong>⏱️</strong> {step.duration}</p>
-                    <p style={{ margin: '0.5rem 0' }}><strong>💰</strong> {step.cost}</p>
-                    <p style={{ margin: '0.5rem 0' }}><strong>💵</strong> {step.salary_after}</p>
-                  </div>
-                  <p style={{ margin: '0.8rem 0 0 0', fontSize: '0.9rem', color: '#555', fontStyle: 'italic' }}>{step.details}</p>
-                  <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#667eea', fontWeight: 'bold' }}>Click for more details →</div>
-                </div>
-              ))}
-            </div>
+                  <ProfilePictureDisplay user={user} size="small" />
+                </button>
+                <button className="btn-logout" onClick={handleLogout}>Logout</button>
+              </>
+            ) : (
+              <button className="btn-login" onClick={() => setShowAuthModal(true)}>Sign In</button>
+            )}
           </div>
-
-          {/* Requirements */}
-          <div style={{ marginBottom: '2rem', background: '#fff8e1', padding: '1.5rem', borderRadius: '10px', border: '2px solid #ffd700' }}>
-            <h3 style={{ marginTop: 0, color: '#f57f17' }}>📋 Requirements to Get Started</h3>
-            <p style={{ fontSize: '1.1rem', color: '#666' }}><strong>Prerequisites:</strong> {selectedCareer.steps[0]?.requirements || 'None'}</p>
-            <p style={{ fontSize: '1rem', color: '#888' }}>You'll need: {selectedCareer.steps[1]?.requirements || 'High School Diploma or equivalent'}</p>
-          </div>
-
-          <h2 style={{ marginTop: '2rem', marginBottom: '1rem', color: '#333' }}>📊 Detailed Career Roadmap</h2>
-          <p style={{ color: '#666', marginBottom: '1.5rem' }}>Click on any stage below to explore more details about what to expect, costs, schools, and requirements.</p>
-          <Timeline steps={selectedCareer.steps} onStepClick={handleStepClick} />
-          
-          <PathCustomizer career={selectedCareer} />
-          <StepModal step={selectedStep} onClose={() => setSelectedStep(null)} />
         </div>
-      )}
-      {showAuthModal && (
-        <AuthModal 
-          onClose={() => setShowAuthModal(false)}
-          onLoginSuccess={handleLoginSuccess}
-        />
-      )}
-      {showProfileSettings && user && (
-        <ProfileSettingsModal
-          user={user}
-          token={token}
-          onClose={() => setShowProfileSettings(false)}
-          onProfileUpdate={handleProfileUpdate}
-        />
-      )}
+      </header>
+
+      {/* Main Content */}
+      <main className="main-content">
+        {showHome && !selectedCareer ? (
+          <>
+            {/* Hero Section */}
+            <section className="hero-section">
+              <div className="hero-content">
+                <h2>Discover Your Ideal Career Path</h2>
+                <p>Explore 80+ professional career tracks with detailed timelines, costs, and salary progression. Make informed decisions about your future.</p>
+                <button className="btn-primary-large" onClick={() => setShowHome(false)}>Start Exploring</button>
+              </div>
+            </section>
+
+            {/* Features Section */}
+            <section className="features-section">
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-chart">▣</div>
+                <h3>Detailed Career Paths</h3>
+                <p>Step-by-step progression from entry-level to advanced roles with accurate timelines and costs.</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-salary">$</div>
+                <h3>Salary Insights</h3>
+                <p>Canadian salary ranges at each career stage to help you plan your financial future.</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-education">✓</div>
+                <h3>Education Guidance</h3>
+                <p>Understand educational requirements, costs, and certifications needed for your chosen field.</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-compare">⟺</div>
+                <h3>Comparison Tools</h3>
+                <p>Compare up to 10 careers side-by-side to find the best fit for your goals and lifestyle.</p>
+              </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="cta-section">
+              <h2>Ready to Plan Your Career?</h2>
+              <button className="btn-primary-large" onClick={() => setShowHome(false)}>Browse All Careers</button>
+            </section>
+          </>
+        ) : (
+          <>
+            {!selectedCareer ? (
+              <>
+                <div className="careers-header">
+                  <h2>Explore Our Career Paths</h2>
+                  <p>Browse detailed progression timelines, salary ranges, and educational requirements for 80+ professional careers in Canada</p>
+                </div>
+                <CareerSelection 
+                  onSelect={handleCareerSelect}
+                  bookmarks={bookmarks}
+                  onToggleBookmark={handleToggleBookmark}
+                  onCompareToggle={handleCompareToggle}
+                  compareList={compareList}
+                />
+                {bookmarks.length > 0 && (
+                  <div className="bookmarks-section">
+                    <h3>Saved Careers ({bookmarks.length})</h3>
+                    <div className="bookmarks-list">
+                      {bookmarks.map((career) => (
+                        <div key={career.id} className="bookmark-item">
+                          <span className="bookmark-title" onClick={() => handleCareerSelect(career)}>{career.title}</span>
+                          <button 
+                            className={`btn-compare ${compareList.find((c) => c.id === career.id) ? 'active' : ''}`}
+                            onClick={() => handleCompareToggle(career)}
+                          >
+                            {compareList.find((c) => c.id === career.id) ? '✓ Selected' : 'Compare'}
+                          </button>
+                          <button 
+                            className="btn-remove"
+                            onClick={() => handleToggleBookmark(career)}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="comparison-container">
+                  <ComparisonView careers={compareList} />
+                </div>
+              </>
+            ) : (
+              <div>
+                <button className="btn-back" onClick={handleBack}>← Back</button>
+                {selectedCareer.image && (
+                  <div style={{
+                    width: '100%',
+                    height: '280px',
+                    overflow: 'hidden',
+                    background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
+                    borderRadius: '12px',
+                    marginBottom: '2rem',
+                    marginTop: '1rem'
+                  }}>
+                    <img 
+                      src={selectedCareer.image} 
+                      alt={selectedCareer.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="career-detail-header">
+                  <div>
+                    <h2>{selectedCareer.title}</h2>
+                    <p className="career-detail-desc">{selectedCareer.description}</p>
+                  </div>
+                  <button 
+                    className={`btn-bookmark ${isBookmarked(selectedCareer.id) ? 'bookmarked' : ''}`}
+                    onClick={() => handleToggleBookmark(selectedCareer)}
+                  >
+                    {isBookmarked(selectedCareer.id) ? '★ Saved' : '☆ Save'}
+                  </button>
+                </div>
+                <Timeline 
+                  steps={selectedCareer.steps}
+                  onStepClick={handleStepClick}
+                />
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      {/* Modals */}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} onLoginSuccess={handleLoginSuccess} />}
+      {showProfileSettings && user && <ProfileSettingsModal user={user} onClose={() => setShowProfileSettings(false)} onUpdate={handleProfileUpdate} />}
+      {selectedStep && <StepModal step={selectedStep} career={selectedCareer} onClose={() => setSelectedStep(null)} />}
     </div>
   );
 }
